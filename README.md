@@ -103,7 +103,7 @@ Lorsque l'on saisit `'` dans le formulaire (juste une quote simple / une apostro
 1. il s'agit d'un cas simple, délibérément vulnérable, pour que l'exercice reste simple
 1. une injection SQL permet d'exécuter des requêtes SQL sur la base de données
 ![Bobby Tables](https://imgs.xkcd.com/comics/exploits_of_a_mom.png)
-1. les répercutions peuvent être assez inattendues. Ici on peut récupérer :
+1. les répercussions peuvent être assez inattendues. Ici on peut récupérer :
     * les mots de passe des utilisateurs alors que le code php n'y fait pas référence
     * l'ensemble des bases de données du serveur
     * les droits des utilisateurs
