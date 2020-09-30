@@ -90,6 +90,7 @@ Les mots de passe se trouvent dans __webapp/webroot/reset.php__
 
     Cet outil exploite les injections SQL et réussit ici à extraire le contenu et la structure des tables. Il sait déchiffrer les champs comme nos mots de passe hashés en MD5.
 
+    ```data
         +----+-------+----------------------------------------------+
         | id | login | password                                     |
         +----+-------+----------------------------------------------+
@@ -100,9 +101,9 @@ Les mots de passe se trouvent dans __webapp/webroot/reset.php__
         | 5  | dave  | 437b930db84b8079c2dd804a71936b5f (something) |
         | 12 | fred  | 570a90bfbf8c7eab5dc5d4e26832d5b1 (fred)      |
         +----+-------+----------------------------------------------+
+    ```
 
     Le mot de passe un peu plus complexe de l'utilisatrice __carol__ peut être retrouvé grâce à des [rainbow tables](https://en.wikipedia.org/wiki/Rainbow_table) disponibles par exemple chez [Hash Toolkit](https://hashtoolkit.com/).
-
 
 ## Corriger les vulnérabilités du code
 
