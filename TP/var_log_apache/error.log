@@ -1,0 +1,37 @@
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.48.3. Set the 'ServerName' directive globally to suppress this message
+[Mon Sep 21 08:51:47.945229 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Mon Sep 21 08:51:47.945698 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Mon Sep 21 15:38:37.240428 2020] [php7:notice] [pid 20] [client 192.168.48.1:41880] UPDATE users SET password='f71dbe52628a3f83a77ab494817525c6' WHERE login='admin' or 1=1 --  ' and password='1a1dc91c907325c69271ddf0c944bc72', referer: http://localhost:8080/2ndOrderSqli/account.php
+[Thu Sep 24 15:43:24.417628 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.48.3. Set the 'ServerName' directive globally to suppress this message
+[Thu Sep 24 15:44:08.505095 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Thu Sep 24 15:44:08.513250 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 24 15:45:43.328170 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.48.3. Set the 'ServerName' directive globally to suppress this message
+[Thu Sep 24 15:47:02.009270 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Thu Sep 24 15:47:02.009964 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 24 16:03:57.683964 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.48.2. Set the 'ServerName' directive globally to suppress this message
+[Thu Sep 24 16:04:01.860219 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Thu Sep 24 16:04:01.862854 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 24 16:05:12.472460 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.48.2. Set the 'ServerName' directive globally to suppress this message
+[Thu Sep 24 16:13:05.757467 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Thu Sep 24 16:13:05.757940 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 24 16:15:00.082707 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.48.2. Set the 'ServerName' directive globally to suppress this message
+[Thu Sep 24 16:15:04.298562 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Thu Sep 24 16:15:04.300766 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 24 16:19:54.375518 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.48.4. Set the 'ServerName' directive globally to suppress this message
+[Thu Sep 24 16:24:20.269635 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Thu Sep 24 16:24:20.270112 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Thu Sep 24 16:25:20.073662 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.80.4. Set the 'ServerName' directive globally to suppress this message
+[Thu Sep 24 16:29:50.604188 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Thu Sep 24 16:29:50.607536 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Mon Sep 28 12:22:55.782610 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 192.168.80.4. Set the 'ServerName' directive globally to suppress this message
+[Mon Sep 28 12:24:01.256463 2020] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.2.33 configured -- resuming normal operations
+[Mon Sep 28 12:24:01.257381 2020] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Mon Sep 28 12:29:38.929236 2020] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully

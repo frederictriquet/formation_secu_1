@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+    web:
+        build: webapp/docker
+        ports:
+            - '8080:80'
+        volumes:
+            - ./webapp/webroot:/var/www/html/
+            # - type: bind
+            #   source: ./var_log_apache
+            #   target: /var/log/apache2
+        secrets:
+            - db-password
+        environment:
+            - PGUSER=root
+            - PGHOST=db
+            - PGPASSFILE=/run/secrets/db-password
+            - PGDATABASE=my_database
+            
+    db:
+        image: postgres:12
+        restart: always
+        volumes:
+            - db-data:/var/lib/postgresql/data
+        secrets:
+            - db-password
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+            - POSTGRES_DB=my_database
+        ports:
+            - 5432:5432
+
+    pgadmin:
+        image: "dpage/pgadmin4:latest"
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=root@localhost.fr
+            - PGADMIN_DEFAULT_PASSWORD=root
+        volumes:
+            - pgadmin-data:/var/lib/pgadmin
+        ports:
+            - 5050:80
+            
+    sqlmap:
+        image: "googlesky/sqlmap:latest"
+
+secrets:
+    db-password:
+        file: db/password.txt
+volumes:
+    db-data:
+    pgadmin-data:
+    #web-var-log:
