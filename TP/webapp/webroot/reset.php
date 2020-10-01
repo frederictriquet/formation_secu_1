@@ -36,7 +36,7 @@ require_once 'include/db.inc.php';
             }
         ?>
         <br/>
-        Database successfully initialised/reset.
+        Database successfully initialized/reset.
         <hr/><a href="/">Back home</a>.
     </body>
 </html>
