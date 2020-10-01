@@ -12,7 +12,7 @@ if (empty($password) || ($password !== $confirmPassword)) {
     die("password is incorrect");
 }
 
-$hash = md5($password);
+$hash = password_hash($password, PASSWORD_DEFAULT);
 $query  = "INSERT INTO users(id,login,password) VALUES(nextval('user_id'), $1, $2)";
 $result = pg_query_params($dbconn, $query, array($login, $hash));
 if (!$result) {

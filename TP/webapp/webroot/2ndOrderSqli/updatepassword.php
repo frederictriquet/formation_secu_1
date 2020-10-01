@@ -18,18 +18,19 @@ if (empty($newPassword) || ($newPassword !== $confirmNewPassword)) {
     die("new password is incorrect");
 }
 
-$query  = "SELECT password FROM users WHERE login=$1";
+$query  = "SELECT id,password FROM users WHERE login=$1";
 $result = pg_query_params($dbconn, $query, array($login));
 if (!$result)
     die('query execution failed');
 
-$storedHash = @pg_fetch_result($result, 0,0);
-$hash = md5($password);
-if ($hash === $storedHash) {
-    $newPasswordHash = md5($newPassword);
-    /* VULNERABLE CODE */
-    $query  = "UPDATE users SET password='$newPasswordHash' WHERE login='$login' and password='$hash'";
-    $result = pg_query($query);
+$row = @pg_fetch_assoc($result, 0);
+$storedHash = $row['password'];
+if (password_verify($password, $storedHash)) {
+    $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    $id = $row['id'];
+    $query  = "UPDATE users SET password=$1 WHERE id=$2";
+    $result = pg_query_params($dbconn, $query, array($newPasswordHash, $id));
     if (!$result)
         die('update password failed');
 }

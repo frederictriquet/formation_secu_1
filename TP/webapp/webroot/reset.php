@@ -20,7 +20,7 @@ require_once 'include/db.inc.php';
                 'CREATE TABLE public.users (
                     id BIGINT NOT NULL,
                     login CHAR(32) NOT NULL,
-                    password CHAR(32) NOT NULL
+                    password CHARACTER VARYING(64) NOT NULL
                 );'
             ];
 
@@ -30,8 +30,7 @@ require_once 'include/db.inc.php';
 
             foreach ($users as $user) {
                 $login = $user[0];
-                // VULNERABLE CODE: do not use MD5 sum to hash and store passwords
-                $hash = md5($user[1]);
+                $hash = password_hash($user[1], PASSWORD_DEFAULT);
                 $query = "INSERT INTO users(id,login,password) VALUES (nextval('user_id'), '$login', '$hash')";
                 execQuery($query, true);
             }

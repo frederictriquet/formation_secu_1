@@ -12,10 +12,8 @@ if (!$result)
 
 $storedHash = @pg_fetch_result($result, 0,0);
 
-$hash = md5($password);
-
 unset($_SESSION['login']);
-if ($hash === $storedHash) {
+if (password_verify($password, $storedHash)) {
     $_SESSION['login'] = $login;
 }
 

@@ -11,23 +11,23 @@ require_once '../include/db.inc.php';
                 <input type="submit">
         </form>
         <?php
+
         if (isset($_POST['login'])) {
             $login = $_POST['login'];
             $password = $_POST['password'];
             echo "login = $login   password = $password <br/>";
 
-            //$login = pg_escape_string($login);
-            $hash = md5($password);
-
-            /* VULNERABLE CODE: query is injectable */
-            $query  = "SELECT COUNT(*) FROM users WHERE login='$login' AND password='$hash';";
-            $result = pg_query($query);
+            $query  = 'SELECT password FROM users WHERE login=$1';
+            $result = pg_query_params($dbconn, $query, array($login));
             if (!$result)
                 die('select users failed');
-
-            while ($row = pg_fetch_row($result)) {
-                echo "$row[0] user matching your criteria<br />";
-            }
+            
+            $row = pg_fetch_row($result);
+            $storedHash = $row[0];
+            $nbPassOK = 0;
+            if (password_verify($password, $storedHash))
+                $nbPassOK = 1;
+            echo "$nbPassOK user matching your criteria<br/>";
         }
         ?>
         <hr/><a href="/">Back home</a>
