@@ -13,11 +13,10 @@ Suivre les étapes et pratiquer ou suivre la vidéo.
     >    docker-compose up
     >```
 
-1. Se connecter à http://localhost:8080/ avec un navigateur.
+1. Se connecter à <http://localhost:8080/> avec un navigateur.
 1. Cliquer sur __reset database__
 1. Voir les mauvaises pratiques dans le code :
-    - __docker-compose.yml__ et __webapp/webroot/include/db.inc.php__
-        - l'utilisateur __root__ est utilisé pour toutes les requêtes à la base de données
+
     - __webapp/webroot/reset.php__
         - les mots de passe sont stockés __hashés en MD5__
     - __webapp/webroot/sqli/index.php__
@@ -53,7 +52,7 @@ Les mots de passe se trouvent dans __webapp/webroot/reset.php__
 1. Première exploitation : détourner le fonctionnement du code
 
     > login = `' or 1=1 --`
-
+    >
     >```sql
     >$query = "SELECT COUNT(*) FROM users WHERE login='' or 1=1 --' AND pass...";
     >--------------------------------------------------|_________|
@@ -82,7 +81,6 @@ Les mots de passe se trouvent dans __webapp/webroot/reset.php__
     >```
 
     La seconde partie est une seconde requête qui ajoute un utilisateur dans la table __users__.
-
 
 1. Troisième exploitation : avec l'outil dédié __sqlmap__
 
@@ -136,17 +134,16 @@ Les mots de passe se trouvent dans __webapp/webroot/reset.php__
         par
 
         >```sql
-        >password CHAR(64) NOT NULL
+        >password CHARACTER VARYING(64) NOT NULL
         >```
 
-    - __webapp/webroot/sqli/index.php__, remplacer
+    - __webapp/webroot/sqli/index.php__, utiliser __password_verify()__
 
-        >```php
-        >
-        >```
+1. correction du problème d'injection
+    - __webapp/webroot/sqli/index.php__
+        Utiliser les requêtes paramétrées (__pg_query_params()__) partout où des données viennent de l'utilisateur
 
-        par
+## Autre mauvaise pratique
 
-        >```php
-        >
-        >```
+- __docker-compose.yml__ et __webapp/webroot/include/db.inc.php__
+    l'utilisateur __root__ est utilisé pour toutes les requêtes à la base de données
