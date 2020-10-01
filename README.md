@@ -9,7 +9,8 @@ Suivre les étapes et pratiquer ou suivre la vidéo.
 1. Récupérer le projet et lancer la plateforme
 
     >```bash
-    >    git pull git@github.com:frederictriquet/formation_secu_1.git
+    >    git clone git@github.com:frederictriquet/formation_secu_1.git
+    >    cd formation_secu_1/TP/
     >    docker-compose up
     >```
 
