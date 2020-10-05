@@ -9,8 +9,9 @@ Suivre les étapes et pratiquer ou suivre la vidéo.
 1. Récupérer le projet et lancer la plateforme
 
     >```bash
-    >    git pull git@github.com:frederictriquet/formation_secu_1.git
-    >    docker-compose up
+    >    git clone git@github.com:frederictriquet/formation_secu_1.git
+    >    cd formation_secu_1/TP/
+    >    docker-compose up web pgadmin
     >```
 
 1. Se connecter à <http://localhost:8080/> avec un navigateur.

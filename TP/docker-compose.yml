@@ -9,6 +9,8 @@ services:
             # - type: bind
             #   source: ./var_log_apache
             #   target: /var/log/apache2
+        depends_on:
+            - db
         secrets:
             - db-password
         environment:
@@ -33,6 +35,8 @@ services:
 
     pgadmin:
         image: "dpage/pgadmin4:latest"
+        depends_on:
+            - db
         environment:
             - PGADMIN_DEFAULT_EMAIL=root@localhost.fr
             - PGADMIN_DEFAULT_PASSWORD=root
@@ -43,6 +47,8 @@ services:
             
     sqlmap:
         image: "googlesky/sqlmap:latest"
+        depends_on:
+            - web
 
 secrets:
     db-password:
