@@ -16,7 +16,6 @@ require_once '../include/db.inc.php';
             $password = $_POST['password'];
             echo "login = $login   password = $password <br/>";
 
-            //$login = pg_escape_string($login);
             $hash = md5($password);
 
             /* VULNERABLE CODE: query is injectable */
