@@ -11,7 +11,7 @@ Suivre les étapes et pratiquer ou suivre la vidéo.
     >```bash
     >    git clone git@github.com:frederictriquet/formation_secu_1.git
     >    cd formation_secu_1/TP/
-    >    docker-compose up
+    >    docker-compose up web pgadmin
     >```
 
 1. Se connecter à <http://localhost:8080/> avec un navigateur.
