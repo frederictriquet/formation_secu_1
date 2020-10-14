@@ -2,7 +2,7 @@
 
 ## Déroulement
 
-Suivre les étapes et pratiquer ou suivre la vidéo.
+Suivre les étapes et pratiquer ou suivre la vidéo <https://youtu.be/PSpeF-UU_uk>.
 
 ## Démarrage
 
